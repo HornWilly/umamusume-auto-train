@@ -59,6 +59,7 @@ def unity_cup_function():
   # for every opponent team
   for rank_match in rank_matches:
     count = CleanDefaultDict()
+    count["score"] = 0
     x, y, w, h = rank_match
     offset_x = constants.GAME_WINDOW_BBOX[0]
     offset_y = constants.GAME_WINDOW_BBOX[1]
@@ -92,6 +93,8 @@ def unity_cup_function():
     if count["affinity_3"] > 4:
       break
   debug(f"Unity matchups: {matchups}")
+  if all(matchup["score"] == 0 for matchup in matchups):
+    warning("No affinity detected for any opponent team. Picking a team at random. Check your resolution/window scaling if this keeps happening.")
   best_match = find_best_match(matchups)
   device_action.click(target=(best_match["mouse_pos"][0], best_match["mouse_pos"][1]))
   device_action.click(select_opponent_mouse_pos)
